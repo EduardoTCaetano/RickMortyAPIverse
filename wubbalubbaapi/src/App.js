@@ -1,72 +1,83 @@
-import React, { useState } from "react";
-import "./App.css";
-import fullLogo from "./logo.svg";
-import logo from "./logo-min.svg";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap";
+import React, { useState, useEffect } from "react";
+
+import Search from "./components/Search/Search";
+import Card from "./components/Card/Card";
+import Pagination from "./components/Pagination/Pagination";
+import Filter from "./components/Filter/Filter";
+import Navbar from "./components/Navbar/Navbar";
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Episodes from "./Pages/Episodes";
+import Location from "./Pages/Location";
+import CardDetails from "./components/Card/CardDetails";
 
 function App() {
-  const [filters, setFilters] = useState({
-    name: "",
-    species: "",
-    gender: "",
-    status: "",
-  });
-
-  const handleFilterChange = (e) => {
-    setFilters({ ...filters, [e.target.id]: e.target.value });
-  };
-
   return (
-    <div className="container">
-      <header>
-        <img src={logo} alt="rick and morty" />
-        <ul>
-          <li><a href="#">Personagens</a></li>
-          <li><a href="#">Localizações</a></li>
-          <li><a href="#">Episódios</a></li>
-        </ul>
-      </header>
+    <Router>
+      <div className="App">
+        <Navbar />
+      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/:id" element={<CardDetails />} />
 
-      <main>
-        <section className="chars">
-          <img src={fullLogo} alt="Rick and Morty" />
-          <div className="filters">
-            <input type="text" id="name" placeholder="Filter by name..." className="filter" value={filters.name} onChange={handleFilterChange} />
-            <select id="species" className="filter" value={filters.species} onChange={handleFilterChange}>
-              <option value="">Species</option>
-              <option value="animal">Animal</option>
-              <option value="alien">Alien</option>
-              <option value="disease">Doença</option>
-              <option value="unknown">Desconhecido</option>
-              <option value="human">Humano</option>
-              <option value="humanoid">Humanoide</option>
-              <option value="mythological">Mitológico</option>
-              <option value="poopybutthole">Poopybutthole</option>
-              <option value="robot">Robo</option>
-            </select>
-            <select id="gender" className="filter" value={filters.gender} onChange={handleFilterChange}>
-              <option value="">Gênero</option>
-              <option value="female">Feminino</option>
-              <option value="male">Masculino</option>
-              <option value="genderless">Sem Gênero</option>
-              <option value="unknown">Desconhecido</option>
-            </select>
-            <select id="status" className="filter" value={filters.status} onChange={handleFilterChange}>
-              <option value="">Status</option>
-              <option value="alive">Vivo</option>
-              <option value="dead">Morto</option>
-              <option value="unknown">Desconhecido</option>
-            </select>
-          </div>
+        <Route path="/episodes" element={<Episodes />} />
+        <Route path="/episodes/:id" element={<CardDetails />} />
 
-          <div className="chars-container">
-            {/* Aqui será renderizado os personagens dinamicamente */}
-          </div>
-
-          <button id="load-more">Carregar mais</button>
-        </section>
-      </main>
-    </div>
+        <Route path="/location" element={<Location />} />
+        <Route path="/location/:id" element={<CardDetails />} />
+      </Routes>
+    </Router>
   );
 }
+
+const Home = () => {
+  let [pageNumber, updatePageNumber] = useState(1);
+  let [status, updateStatus] = useState("");
+  let [gender, updateGender] = useState("");
+  let [species, updateSpecies] = useState("");
+  let [fetchedData, updateFetchedData] = useState([]);
+  let [search, setSearch] = useState("");
+  let { info, results } = fetchedData;
+
+  let api = `https://rickandmortyapi.com/api/character/?page=${pageNumber}&name=${search}&status=${status}&gender=${gender}&species=${species}`;
+
+  useEffect(() => {
+    (async function () {
+      let data = await fetch(api).then((res) => res.json());
+      updateFetchedData(data);
+    })();
+  }, [api]);
+  return (
+    <div className="App">
+      <h1 className="text-center mb-3">Characters</h1>
+      <Search setSearch={setSearch} updatePageNumber={updatePageNumber} />
+      <div className="container">
+        <div className="row">
+          <Filter
+            pageNumber={pageNumber}
+            status={status}
+            updateStatus={updateStatus}
+            updateGender={updateGender}
+            updateSpecies={updateSpecies}
+            updatePageNumber={updatePageNumber}
+          />
+          <div className="col-lg-8 col-12">
+            <div className="row">
+              <Card page="/" results={results} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <Pagination
+        info={info}
+        pageNumber={pageNumber}
+        updatePageNumber={updatePageNumber}
+      />
+    </div>
+  );
+};
 
 export default App;
