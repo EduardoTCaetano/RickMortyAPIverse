@@ -7,7 +7,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4">
       <div className="container">
-        <img src={logo} alt="rick and morty" className="App-logo" />
+        <a href=""><img src={logo} alt="rick and morty" className="App-logo" /></a>
 
         <style jsx>{`
           button[aria-expanded="false"] > .close {

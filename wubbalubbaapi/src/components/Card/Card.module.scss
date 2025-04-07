@@ -1,26 +1,29 @@
 @keyframes portalGlow {
     0% {
-      box-shadow: 0 0 10px #00ff80, 0 0 20px #1bff1b;
+      box-shadow: 0 0 10px #00ff80, 0 0 20px #2fff2f;
     }
     50% {
-      box-shadow: 0 0 20px #00ff80, 0 0 40px #1bff1b;
+      box-shadow: 0 0 10px #00ff80, 0 0 15px #15d015;
     }
     100% {
-      box-shadow: 0 0 10px #00ff80, 0 0 20px #1bff1b;
+      box-shadow: 0 0 10px #00ff80, 0 0 10px #0d870d;
     }
   }
   
   .card {
-    border: 2px solid #0b5ed7;
+    height: 100%;
+    border: 2px solid #014b06;
     border-radius: 10px;
-    background: radial-gradient(circle, #1bff1b, #00ff80, #006400);
     animation: portalGlow 2s infinite alternate;
     transition: box-shadow 0.3s ease-in-out;
+    padding: 10px;
+    overflow: hidden; 
   
     &:hover {
       box-shadow: 0 0 30px #00ff80, 0 0 50px #1bff1b;
     }
   }
+  
   
   .img {
     border-radius: 10px 10px 0 0;
@@ -32,3 +35,4 @@
     font-size: 17px;
   }
   
+ 
