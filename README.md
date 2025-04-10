@@ -78,6 +78,9 @@ npm start
 
 ---
 
+## ☁️ Deploy
+- [Vercel](https://vercel.com/)
+---
 
 ## 🤝 Contribuindo
 
